@@ -3,7 +3,7 @@
 Curso no Senai de Administrador de Banco de Dados
 
 [Página do curso](https://sistemafibra.org.br/senai/custom/inovatech/index.php#)
- | [Código das Aulas](https://drive.google.com/drive/folders/1SBetwEQKxlasAd-UDQrnkttZgf4RRoEI) |[Git do Professor](https://github.com/professorfrancisco/administrador_banco_de_dados_mysql)
+ | [Código das Aulas](https://drive.google.com/drive/folders/1SBetwEQKxlasAd-UDQrnkttZgf4RRoEI) | [Git do Professor](https://github.com/professorfrancisco/administrador_banco_de_dados_mysql)
 
 ## Aula 001 - 📅 20/02/2024 - Ter
 
