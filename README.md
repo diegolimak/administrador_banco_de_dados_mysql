@@ -26,6 +26,6 @@ Curso no Senai de Administrador de Banco de Dados
 ## Aula 010 - 📅 05/03/2024 - Ter
 
 - inner join - O INNER JOIN no MySQL é uma cláusula usada para combinar registros de duas tabelas com base em valores correspondentes em ambas as tabelas.
-  [inner_join]
+  [inner_join](inner_join)
   
 ## Aula 011 - 📅 06/03/2024 - Qua
