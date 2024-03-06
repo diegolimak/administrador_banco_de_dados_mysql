@@ -1,0 +1,16 @@
+select 
+a.nome,
+s.sexo,
+t.cod_turma,
+t.turno,
+t.data_inicio,
+t.data_final,
+c.nome nome_curso,
+c.modalidade,
+c.carga_horaria
+from aluno a
+inner join sexo s on s.id_sexo = a.id_sexo
+inner join aluno_has_turma at on at.id_aluno = a.id_aluno
+inner join turma t on t.id_turma = at.id_turma
+inner join turma_has_curso tc on tc.id_turma = t.id_turma
+inner join curso c on c.id_curso = tc.id_curso;
