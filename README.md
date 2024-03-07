@@ -29,3 +29,8 @@ Curso no Senai de Administrador de Banco de Dados
   [inner_join](inner_join)
   
 ## Aula 011 - 📅 06/03/2024 - Qua
+
+- Retorna quantidade de Homens e Mulheres cadatradas por curso ! separar pela a modadelidades -Presencial, Semi-presencial e EAD-
+[count_e_sum](count_e_sum)
+
+## Aula 012 - 📅 07/03/2024 - Qui
