@@ -1,0 +1,116 @@
+--- Criação do banco de dados 
+create DATABASE	escola;
+--------------------------------------------------------------
+
+--- Ligação com o banco de dados 
+use escola;
+
+
+
+---------------
+-- COUNT()
+---------------
+
+
+select 
+c.nome nome_curso,
+count(tp.id_professor) qt_professores
+from aluno a
+inner join sexo s on s.id_sexo = a.id_sexo
+inner join aluno_has_turma at on at.id_aluno = a.id_aluno
+inner join turma t on t.id_turma = at.id_turma
+inner join turma_has_curso tc on tc.id_turma = t.id_turma
+inner join curso c on c.id_curso = tc.id_curso
+inner join professor_has_turma tp on tp.id_turma = t.id_turma
+group by 
+c.nome;
+
+---------------
+-- SUM() - Soma das disciplinas associados aos cursos 
+---------------
+
+select 
+c.nome,
+-- a.nome,
+-- s.sexo,
+-- t.cod_turma,
+-- t.turno,
+-- t.data_inicio,
+-- t.data_final,
+-- c.nome nome_curso,
+-- c.modalidade,
+-- c.carga_horaria
+c.carga_horaria,
+sum(d.carga_horaria) qt_horas
+from aluno a
+inner join sexo s on s.id_sexo = a.id_sexo
+inner join aluno_has_turma at on at.id_aluno = a.id_aluno
+inner join turma t on t.id_turma = at.id_turma
+inner join turma_has_curso tc on tc.id_turma = t.id_turma
+inner join curso c on c.id_curso = tc.id_curso
+inner join professor_has_turma tp on tp.id_turma = t.id_turma
+inner join curso_has_disciplina cd on cd.id_curso = c.id_curso
+inner join disciplina d on d.id_disciplina = cd.id_disciplina
+group by 
+c.nome,
+c.carga_horaria;
+
+
+select 
+c.nome as nome_curso,
+sum(d.carga_horaria) total_ch_disciplina,
+c.carga_horaria
+from curso c
+inner join curso_has_disciplina cd on cd.id_curso = c.id_curso
+inner join disciplina d on d.id_disciplina = cd.id_disciplina
+group by 
+c.nome,
+c.carga_horaria;
+
+-- Retorna quantidade de homens e mulheres cadatradas por curso - separ pela a modadelidae -presencial e EAD-
+
+
+select 
+c.nome,
+-- a.nome,
+count(s.sexo) qt_de_sexo,
+s.sexo,
+-- t.cod_turma,
+-- t.turno,
+-- t.data_inicio,
+-- t.data_final,
+-- c.nome nome_curso,
+c.modalidade,
+-- c.carga_horaria
+c.carga_horaria,
+sum(d.carga_horaria) qt_horas
+from aluno a
+inner join sexo s on s.id_sexo = a.id_sexo
+inner join aluno_has_turma at on at.id_aluno = a.id_aluno
+inner join turma t on t.id_turma = at.id_turma
+inner join turma_has_curso tc on tc.id_turma = t.id_turma
+inner join curso c on c.id_curso = tc.id_curso
+inner join professor_has_turma tp on tp.id_turma = t.id_turma
+inner join curso_has_disciplina cd on cd.id_curso = c.id_curso
+inner join disciplina d on d.id_disciplina = cd.id_disciplina
+group by 
+c.nome,
+c.carga_horaria,
+c.modalidade,
+s.sexo
+order by c.nome;
+
+
+----
+
+select * from professor_has_turma;
+select * from curso_has_disciplina;
+select * from turma;
+select * from disciplina;
+select * from professor;
+
+insert into professor_has_turma (id_professor, id_turma) values (15,3);
+
+
+	
+
