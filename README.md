@@ -34,3 +34,5 @@ Curso no Senai de Administrador de Banco de Dados
 [count_e_sum](count_e_sum)
 
 ## Aula 012 - 📅 07/03/2024 - Qui
+## Aula 012 - 📅 08/03/2024 - Qui
+## Aula 012 - 📅 07/03/2024 - Qui
