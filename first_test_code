@@ -675,3 +675,37 @@ VALUES (1, 'XYZ Filial Externa', 'XYZ Externa', '01234567890123', 'IE012345', 'I
 
 
 
+-- Crie uma query que retorne o nome e a data de cadastro Da tabela Fornecedor
+-- o nome na tabela tipo_fornecedor
+-- o nome na tabela contato
+-- o cpf, nome, data_nascimento, data_cadastro, rg, orgao_rg da tabela colaborador
+-- nome tabela setor
+-- Filtre o resultado pelo cpf_cnpj do fornecedor
+
+
+
+SELECT
+f.nome nome_fornecedor,
+f.data_cadastro,
+f.CPF_CNPJ,
+tf.nome,
+co.nome nome_contato_fornecedor,
+c.nome nome_colaborador,
+c.cpf,
+c.rg,
+c.orgao_rg,
+s.nome nome_setor
+from colaborador c
+inner join setor s on s.id = c.ID_SETOR
+inner join empresa e on e.empresa_id = s.EMPRESA_ID
+inner join fornecedor f on f.id = e.ID
+inner join tipo_fornecedor tf on tf.id = f.ID_EMPRESA
+inner join contato co on co.id = c.TIPO_COLABORADOR_ID
+where f.CPF_CNPJ ="254543543";
+
+
+select * from fornecedor
+
+
+-- exlusão de fornecedores duplicados
+delete from fornecedor where id in (5,6);
