@@ -1,343 +1,677 @@
---- Criação do banco de dados 
-create DATABASE	escola;
---------------------------------------------------------------
+-------
+CRIAÇÃO DO BANCO DE DADOS SENAI ERP
+-------
 
---- Ligação com o banco de dados 
-use escola;
+create database senai_erp;
 
---------------------------------------------------------------
---- Criação de tabelas 
---------------------------------------------------------------
+DROP DATABASE SENAI_ERP;
 
-create table turma(
-id_turma int auto_increment primary key,
-cod_turma varchar (11),
-turno varchar (50),
-data_inicio date,
-data_final date
-);
-create table curso(
-id_curso int auto_increment primary key,
-nome varchar (100),
-modalidade varchar (45),
-carga_horaria int,
-codigo_turma varchar (20)
-);
-create table disciplina(
-id_disciplina int auto_increment primary key,
-nome varchar (50),
-carga_horaria int
-);
-create table sala(
-id_sala int auto_increment primary key,
-numero int,
-qt_max_aluno int
-);
-create table sexo(
-id_sexo int auto_increment primary key,
-sexo varchar (45)
+-------
+USANDO O BANCO DE DADOS SENAI ERP
+-------
+
+use senai_erp;
+
+-------
+## CRIAÇÃO DE TABELAS SEM CHAVES ESTRAGEIRAS
+-------
+
+create table GRUP0_PRODUTO(
+ID int auto_increment primary key,
+NOME VARCHAR(20),
+DESCRIÇÃO TEXT
 );
 
---------------------------------------------------------------
---- + foreing 
---------------------------------------------------------------
-
-create table aluno(
-id_aluno int auto_increment primary key,
-nome varchar (200) not null,
-cpf varchar (20) not null unique, 
-rg varchar (15) not null unique,
-data_nascimento date,
-etnia varchar (60),
-telefone varchar (20),
-nacionalidade varchar (50),
-uf varchar (2),
-id_sexo int,
-foreign key (id_sexo) references sexo(id_sexo)
-);
-create table professor(
-id_professor int auto_increment primary key,
-nome varchar (200) not null,
-cpf varchar (20) not null unique, 
-rg varchar (15) not null unique,
-email varchar (250),
-telefone varchar (20),
-matricula varchar (15),
-lotacao varchar (45),
-id_sexo int,
-foreign key (id_sexo) references sexo(id_sexo)
-);
-create table login(
-senha varchar (45),
-id_aluno int,
-id_professor int,
-foreign key (id_aluno) references aluno(id_aluno),
-foreign key (id_professor) references professor(id_professor)
-);
-
---------------------------------------------------------------
---- foreing 
---------------------------------------------------------------
-
-create table aluno_has_turma(
-id_aluno int,
-id_turma int,
-foreign key (id_aluno) references aluno(id_aluno),
-foreign key (id_turma) references turma(id_turma)
-);
-create table professor_has_turma(
-id_professor int,
-id_turma int,
-foreign key (id_professor) references professor(id_professor),
-foreign key (id_turma) references turma(id_turma)
-);
-create table turma_has_curso(
-id_turma int,
-id_curso int,
-foreign key (id_turma) references turma(id_turma),
-foreign key (id_curso) references curso(id_curso)
-);
-create table sala_has_turma(
-id_sala int,
-id_turma int,
-foreign key (id_sala) references sala(id_sala),
-foreign key (id_turma) references turma(id_turma)
-);
-create table curso_has_disciplina(
-id_curso int,
-id_disciplina int,
-foreign key (id_curso) references curso(id_curso),
-foreign key (id_disciplina) references disciplina(id_disciplina)
+CREATE TABLE UNIDADE_PRODUTO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(10),
+    DESCRIÇÃO TEXT
 );
 
 
---------------------------------------------------------------
---- insert // SEXO
---------------------------------------------------------------
+CREATE TABLE CARGO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT,
+    SALARIO DOUBLE(11,2)
+);
 
-insert into sexo(sexo) values("M"),("F");
+CREATE TABLE TIPO_COLABORADOR(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT
+);
 
-update aluno set id_sexo = 2 where id_aluno = 12;
+CREATE TABLE NIVEL_FORMACAO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT
+);
 
---------------------------------------------------------------
---- insert // ALUNO
---------------------------------------------------------------
+CREATE TABLE FUNCAO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    DESCRICAO_MENU VARCHAR(30),
+    IMAGEM_MENU VARCHAR(30),
+    METODO VARCHAR(30)
+);
 
-insert into aluno(nome,cpf,rg,data_nascimento,etnia,telefone,nacionalidade,uf,id_sexo) 
-values ("Diego de Araujo Lima", "024.936.901-09","110135","1991-03-24","Preto", "61 991331180","Brasileiro","DF","1");
-
-insert into aluno(nome,cpf,rg,data_nascimento,etnia,telefone,nacionalidade,uf,id_sexo) 
-values ("Bruno Lima","024.906.001-00","111584","1991-04-24","Preto","61991331180","Brasileiro","DF","1"),
-("Joao Paulo","024.906.001-01","118214","1991-04-12","Branco","61991331181","Brasileiro","RJ","1"),
-("Fernada Lima","024.906.001-02","189684","1981-03-01","Pardo","61991331182","Brasileiro","BA","2"),
-("Maria Silva","024.906.001-03","1983284","1991-08-01","Preto","61991331183","Brasileiro","MA","2"),
-("Bruna Cardoso","024.906.001-04","18231684","1998-03-01","Branco","61991331184","Brasileiro","CE","1"),
-("Joao Moreira","024.906.001-05","1156489","1992-03-01","Pardo","61991331185","Brasileiro","SP","1");
-
-
---------------------------------------------------------------
---- insert // PROFESSOR
---------------------------------------------------------------
-
-insert into professor(nome,cpf,rg,email,telefone,matricula,lotacao,id_sexo)
-values ("João da Silva","011.111.111-08","123456","joao.silva@gmail.com","619999999","100","Guara","1");
-
-insert into professor(nome,cpf,rg,email,telefone,matricula,lotacao,id_sexo)
-values ("Bruna Carol","251.111.111-08","1234357","bruna@gmail.com","619998999","101","Cruzeiro","2"),
-("Bernado Silva","331.111.111-08","123457","Bernardo@gmail.com","6191298999","102","Samambaia","1"),
-("Maria Lima","44.111.111-08","1234578","maria@gmail.com","619678999","103","Asa Sul","2"),
-("Fernando Costa","255.111.111-08","1253457","fernando@gmail.com","6199678999","104","Sobradinh","1"),
-("Ariel Melo","251.166.111-08","1234574","ariel@gmail.com","619998999","105","SIG","1"),
-("Pedro Joao","251.188.111-08","12345718","pedro@gmail.com","6196798999","106","Asa Norte","1"),
-("Denise Maria","251.911.111-08","1234517","denise@gmail.com","6199967899","107","Sudoeste","2");
-
---------------------------------------------------------------
---- insert // LOGIN - --professor
---------------------------------------------------------------
-select * from login;
-
-select * from login;
-insert into login(senha,id_professor)
-values ("12345",1),("124485",9),("12345",10),("1234aq5",11),("12q335",12),("12345",13),("1234qe5",14),("12345eer",15);
-
-alter table login add column id_login int auto_increment primary key; 
-
---------------------------------------------------------------
---- insert // LOGIN - --aluno
---------------------------------------------------------------
-
-select * from aluno;
-insert into login(senha,id_aluno)
-values ("fd12345",1),("124fd485",8),("1rt2345",9),("1234ewraq5",10),("12q3werw5",11),("123wqe45",12),("qwe1234qe5",13);
-
---------------------------------------------------------------
---- insert // CURSO
---------------------------------------------------------------
-
-select * from curso;
-insert into curso(nome,modalidade,carga_horaria,codigo_turma)
-values ("Publicidade e Propaganda","EAD","2000","PB-001"),
-("Administrador de Banco de Dados","Presencial","240","ADMB-001"),
-("Administração","Semi-Presencial","1240","ADM-001"),
-("Direito","Presencial","2240","DIR-001");
-
---------------------------------------------------------------
---- insert // DISCIPLINA 
--------------------------------------------------------------
-
-select * from disciplina;
-insert into disciplina(nome,carga_horaria)
-values ("Fotografia","100"),
-("MySQL","30"),
-("TGA","50"),
-("Direito da Familia","50");
-
---------------------------------------------------------------
---- insert // SALA
--------------------------------------------------------------
-
-select * from sala;
-insert into sala(numero,qt_max_aluno)
-values ("301","30"),
-("302","30"),
-("303","50"),
-("304","10"),
-("305","20");
-
---------------------------------------------------------------
---- insert // TURMA
--------------------------------------------------------------
-
-select * from turma;
-insert into turma(cod_turma,turno,data_inicio,data_final)
-values ("001-A","Matutino","2024-03-01","2025-03-01"),
-("002-B","Vespertino","2024-03-01","2026-03-01"),
-("001-C","Noturno","2024-03-01","2025-12-01"),
-("005-F","Matutino","2024-12-01","2025-12-01");
-
---------------------------------------------------------------
---- insert // PROFESSOR_HAS_TURMA
--------------------------------------------------------------
-
-select * from professor;
-select * from turma;
-select * from professor_has_turma;
-
-insert into professor_has_turma(id_professor,id_turma)
-values (1,1),(1,2),(1,4);
-
-insert into professor_has_turma(id_professor,id_turma)
-values (10,2),(10,4);
-
---------------------------------------------------------------
---- insert // CURSO_HAS_DISCIPLINA
--------------------------------------------------------------
-
-select * from curso;
-select * from disciplina;
-select * from curso_has_disciplina;
-
-insert into curso_has_disciplina(id_curso,id_disciplina)
-values (1,1);
-
-insert into curso_has_disciplina(id_curso,id_disciplina)
-values (2,2);
-
-insert into curso_has_disciplina(id_curso,id_disciplina)
-values (3,3);
-
-insert into curso_has_disciplina(id_curso,id_disciplina)
-values (4,4);
-
---------------------------------------------------------------
---- insert // TURMA_HAS_CURSO
--------------------------------------------------------------
-
-select * from turma;
-select * from curso;
-select * from turma_has_curso;
-
-insert into turma_has_curso(id_turma,id_curso)
-values (1,1);
-
-insert into turma_has_curso(id_turma,id_curso)
-values (2,2);
-
-insert into turma_has_curso(id_turma,id_curso)
-values (3,3);
-
-insert into turma_has_curso(id_turma,id_curso)
-values (4,4);
-
---------------------------------------------------------------
---- insert // ALUNO_HAS_TURMA
--------------------------------------------------------------
-
-select * from aluno;
-select * from turma;
-select * from aluno_has_turma;
-
-insert into aluno_has_turma(id_aluno,id_turma)
-values (1,1);
-
-insert into aluno_has_turma(id_aluno,id_turma)
-values (8,2);
-
-insert into aluno_has_turma(id_aluno,id_turma)
-values (9,3);
-
-insert into aluno_has_turma(id_aluno,id_turma)
-values (10,4);
-
-insert into aluno_has_turma(id_aluno,id_turma)
-values (11,1);
-
-insert into aluno_has_turma(id_aluno,id_turma)
-values (12,2);
-
-insert into aluno_has_turma(id_aluno,id_turma)
-values (13,3);
+CREATE TABLE PAPEL(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT
+);
 
 
---------------------------------------------------------------
---- inner join // TABELA ALUNO + SEXO
--------------------------------------------------------------
+CREATE TABLE TIPO_RELACIONAMENTO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT
+);
 
-select nome,cpf,rg,data_nascimento,etnia,telefone,nacionalidade,uf,s.sexo from
-aluno a 
-inner join sexo s
-on s.id_sexo = a.id_sexo;
+CREATE TABLE TIPO_EMAIL(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT
+);
 
-select * from aluno;
+CREATE TABLE TIPO_TELEFONE(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT
+);
 
---------------------------------------------------------------
---- inner join // ALUNO + TURMA
--------------------------------------------------------------
+CREATE TABLE TIPO_ENDERECO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT
+);
 
-SELECT a.nome,t.id_turma,m.nome
-FROM aluno a
-INNER JOIN aluno_has_turma t ON t.id_turma = t.id_turma,
-INNER JOIN turma m on m.nome = m.nome
+CREATE TABLE CFOP(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    CFOP INT,
+    DESCRICAO TEXT,
+    APLICACAO TEXT
+);
 
-select * from aluno_has_turma;
+CREATE TABLE OPERADORA_CARTAO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    BANDEIRA VARCHAR(30),
+    NOME VARCHAR(50)
+);
+
+CREATE TABLE PAIS(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    CODIGO INT,
+    NOME VARCHAR(100),
+    SIGLA2 CHAR(2),
+    SIGLA3 CHAR(3)
+);
+
+CREATE TABLE SITUACAO_FOR_CLI(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT
+);
+
+CREATE TABLE BANCO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    CODIGO INT,
+    NOME VARCHAR(100),
+    URL VARCHAR(255)
+);
+
+CREATE TABLE TIPO_FORNECEDOR(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT
+);
+
+-------
+## CRIAÇÃO DE TABELAS + CHAVES ESTRAGEIRAS (FOREIGN KEY)
+-------
+
+CREATE TABLE PAPEL_FUNCAO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    FUNCAO_ID INT NOT NULL,
+    PAPEL_ID INT NOT NULL,
+    PODE_CONSULTAR CHAR(1),
+    PODE_INSERIR CHAR(1),
+    PODE_ALTERAR CHAR(1),
+    PODE_EXCLUIR CHAR(1),
+    FOREIGN KEY (FUNCAO_ID) REFERENCES FUNCAO(ID),
+    FOREIGN KEY (PAPEL_ID) REFERENCES PAPEL(ID)
+);
+
+-- SELECT * FROM PAPEL_FUNCAO
+
+
+CREATE TABLE SUB_GRUPO_PRODUTO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    ID_GRUPO INT NOT NULL,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT,
+    FOREIGN KEY (ID_GRUPO) REFERENCES grupo_produto(ID)
+);
+
+-- SELECT * FROM SUB_GRUPO_PRODUTO
+
+CREATE TABLE PRODUTO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    ID_SUB_GRUPO INT NOT NULL,
+    ID_UNIDADE INT NOT NULL,
+    GTIN CHAR(14),
+    NOME_PRODUTO VARCHAR(100),
+    DESCRICAO TEXT,
+    DESCRICAO_PDV VARCHAR(30),
+    VALOR_COMPRA DOUBLE(11,2),
+    VALOR_VENDA DOUBLE(11,2),
+    QTD_ESTOQUE DOUBLE(11,2),
+    ESTOQUE_MIN DOUBLE(11,2),
+    ESTOQUE_MAX DOUBLE(11,2),
+    EXCLUIDO CHAR(1),
+    DATA_CADASTRO DATE,
+    FOREIGN KEY (ID_UNIDADE) REFERENCES UNIDADE_PRODUTO(ID),
+    FOREIGN KEY (ID_SUB_GRUPO) REFERENCES UNIDADE_PRODUTO(ID)
+);
+
+-- SELECT * FROM PRODUTO
+
+CREATE TABLE EMPRESA(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    EMPRESA_ID INT NOT NULL,
+    RAZAO_SOCIAL VARCHAR(150),
+    NOME_FANTASIA VARCHAR(150),
+    CNPJ VARCHAR(14),
+    INSCRICAO_ESTADUAL VARCHAR(30),
+    INCRICAO_MUNICIPAL VARCHAR(30),
+    MATRIZ_FILIAL CHAR(1),
+    DATA_CADASTRO DATE,
+    FOREIGN KEY (EMPRESA_ID) REFERENCES EMPRESA(ID)
+);
+
+-- SELECT * FROM EMPRESA
+
+CREATE TABLE CONVENIO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    ID_EMPRESA INT NOT NULL,
+    NOME VARCHAR(100),
+    DESCRICAO TEXT,
+    DESCONTO DOUBLE(11,2),
+    DATA_VENCIMENTO DATE,
+    ENDERECO VARCHAR(250),
+    CONTATO VARCHAR(30),
+    TELEFONE VARCHAR(10),
+    EXCLUIDO CHAR(1),
+    DATA_CADASTRO DATE,
+    FOREIGN KEY (ID_EMPRESA) REFERENCES EMPRESA(ID)
+);
+
+-- SELECT * FROM CONVENIO
+
+CREATE TABLE SETOR(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    EMPRESA_ID INT NOT NULL,
+    NOME VARCHAR(20),
+    DESCRICAO TEXT,
+    FOREIGN KEY (EMPRESA_ID) REFERENCES EMPRESA(ID)
+);
+
+-- SELECT * FROM SETOR
+
+CREATE TABLE EMPRESA_PRODUTO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    EMPRESA_ID INT NOT NULL,
+    PRODUTO_ID INT NOT NULL,
+    FOREIGN KEY (EMPRESA_ID) REFERENCES EMPRESA(ID),
+    FOREIGN KEY (PRODUTO_ID) REFERENCES PRODUTO(ID)
+);
+
+-- SELECT * FROM EMPRESA_PRODUTO
+
+CREATE TABLE FORNECEDOR(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    SITUACAO_FOR_CLI_ID INT NOT NULL,
+    TIPO_FORNECEDOR_ID INT NOT NULL,
+    ID_EMPRESA INT NOT NULL,
+    NOME VARCHAR(150),
+    CPF_CNPJ VARCHAR(14),
+    RG VARCHAR(20),
+    ORGAO_RG VARCHAR(10),
+    INSCRICAO_ESTADUAL VARCHAR(30),
+    INCRICAO_MUNICIPAL VARCHAR(30),
+    DESDE DATE,
+    TIPO_PESSOA CHAR(1),
+    EXCLUIDO CHAR(1),
+    DATA_CADASTRO DATE,
+    FOREIGN KEY (SITUACAO_FOR_CLI_ID) REFERENCES SITUACAO_FOR_CLI(ID),
+    FOREIGN KEY (TIPO_FORNECEDOR_ID) REFERENCES TIPO_FORNECEDOR(ID),
+    FOREIGN KEY (ID_EMPRESA) REFERENCES EMPRESA(ID)
+);
+
+-- SELECT * FROM FORNECEDOR
+
+CREATE TABLE CLIENTE(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    SITUACAO_FOR_CLI_ID INT NOT NULL,
+    ID_EMPRESA INT NOT NULL,
+    NOME VARCHAR(150),
+    CPF_CNPJ VARCHAR(14),
+    RG VARCHAR(20),
+    ORGAO_RG VARCHAR(10),
+    INSCRICAO_ESTADUAL VARCHAR(30),
+    INSCRICAO_MUNICIPAL VARCHAR(30),
+    DESDE DATE,
+    TIPO_PESSOA CHAR(1),
+    EXCLUIDO CHAR(1),
+    DATA_CADASTRO DATE,
+    FOREIGN KEY (SITUACAO_FOR_CLI_ID) REFERENCES SITUACAO_FOR_CLI(ID),
+    FOREIGN KEY (ID_EMPRESA) REFERENCES EMPRESA(ID)
+);
+
+-- SELECT * FROM CLIENTE
+
+CREATE TABLE FORNECEDOR_PRODUTO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    FORNECEDOR_ID INT NOT NULL,
+    PRODUTO_ID INT NOT NULL,
+    FOREIGN KEY (FORNECEDOR_ID) REFERENCES FORNECEDOR(ID),
+    FOREIGN KEY (PRODUTO_ID) REFERENCES PRODUTO(ID)
+);
+
+SELECT * FROM BANCO
+
+CREATE TABLE INDICE_ECONOMICO
+(
+    ID        INT AUTO_INCREMENT PRIMARY KEY,
+    PAIS_ID   INT NOT NULL,
+    SIGLA     VARCHAR(10),
+    NOME      VARCHAR(50),
+    DESCRICAO TEXT,
+    FOREIGN KEY (PAIS_ID) REFERENCES PAIS (ID)
+);
+
+
+CREATE TABLE ESTADO
+(
+    ID        INT AUTO_INCREMENT PRIMARY KEY,
+    PAIS_ID   INT NOT NULL,
+    SIGLA     VARCHAR(10),
+    NOME      VARCHAR(50),
+    CODIGO_IBGE INT,
+    FOREIGN KEY (PAIS_ID) REFERENCES PAIS(ID)
+);
+
+
+CREATE TABLE CIDADE
+(
+    ID        INT AUTO_INCREMENT PRIMARY KEY,
+    ESTADO_ID   INT NOT NULL,
+    NOME      VARCHAR(50),
+    CODIGO_IBGE INT,
+    FOREIGN KEY (ESTADO_ID) REFERENCES ESTADO(ID)
+);
+
+
+CREATE TABLE CEP
+(
+    ID        INT AUTO_INCREMENT PRIMARY KEY,
+    CIDADE_ID   INT NOT NULL,
+    CEP      VARCHAR(8),
+    LOGRADOURO VARCHAR(100),
+    BAIRRO VARCHAR(50),
+    FOREIGN KEY (CIDADE_ID) REFERENCES CIDADE(ID)
+);
+
+
+CREATE TABLE AGENCIA_BANCO
+(
+    ID        INT AUTO_INCREMENT PRIMARY KEY,
+    CEP_ID INT NOT NULL,
+    BANCO_ID INT NOT NULL,
+    CODIGO INT,
+    NOME VARCHAR(100),
+    ENDERECO VARCHAR(100),
+    TELEFONE VARCHAR(10),
+    GERENTE VARCHAR(30),
+    CONTATO VARCHAR(30),
+    OBS TEXT,
+    FOREIGN KEY (BANCO_ID) REFERENCES BANCO(ID)
+);
+
+
+CREATE TABLE COLABORADOR
+(
+    ID        INT AUTO_INCREMENT PRIMARY KEY,
+    NIVEL_FORMACAO_ID INT NOT NULL,
+    TIPO_COLABORADOR_ID INT NOT NULL,
+    CARGO_ID INT NOT NULL,
+    ID_SETOR INT NOT NULL,
+    NOME VARCHAR(150),
+    CPF VARCHAR(11),
+    RG VARCHAR(20),
+    ORGAO_RG VARCHAR(10),
+    DATA_NASCIMENTO DATE,
+    TIPO_SANGINEO VARCHAR(5),
+    FOTO_34 VARCHAR(255),
+    EXCLUIDO CHAR(1),
+    DATA_CADASTRO DATE,
+    FOREIGN KEY (ID_SETOR) REFERENCES SETOR(ID),
+    FOREIGN KEY (CARGO_ID) REFERENCES CARGO(ID),
+    FOREIGN KEY (TIPO_COLABORADOR_ID) REFERENCES TIPO_COLABORADOR(ID),
+    FOREIGN KEY (NIVEL_FORMACAO_ID) REFERENCES NIVEL_FORMACAO(ID)
+);
+
+
+CREATE TABLE USUARIO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    PAPEL_ID INT NOT NULL,
+    COLABORADOR_ID INT NOT NULL,
+    LOGIN VARCHAR(20),
+    SENHA VARCHAR(20),
+    DATA_CADASTRO DATE,
+    FOREIGN KEY (PAPEL_ID) REFERENCES PAPEL(ID),
+    FOREIGN KEY (COLABORADOR_ID) REFERENCES COLABORADOR(ID)
+);
+
+
+CREATE TABLE COLABORADOR_RELACIONAMENTO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    TIPO_RELACIONAMENTO_ID INT NOT NULL,
+    COLABORADOR_ID INT NOT NULL,
+    NOME VARCHAR(100),
+    FOREIGN KEY (TIPO_RELACIONAMENTO_ID) REFERENCES TIPO_COLABORADOR(ID),
+    FOREIGN KEY (COLABORADOR_ID) REFERENCES COLABORADOR(ID)
+);
+
+
+CREATE TABLE CONTATO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    EMPRESA_ID INT NOT NULL,
+    COLABORADOR_ID INT NOT NULL,
+    CLIENTE_ID INT NOT NULL,
+    FORNECEDOR_ID INT NOT NULL,
+    NOME VARCHAR(100),
+    DONO CHAR(1),
+    FOREIGN KEY (EMPRESA_ID) REFERENCES EMPRESA(ID),
+    FOREIGN KEY (COLABORADOR_ID) REFERENCES COLABORADOR(ID),
+    FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(ID),
+    FOREIGN KEY (FORNECEDOR_ID) REFERENCES FORNECEDOR(ID)
+);
+
+
+CREATE TABLE CONTATO_EMAIL(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    TIPO_EMAIL_ID INT NOT NULL,
+    CONTATO_ID INT NOT NULL,
+    EMAIL VARCHAR(100),
+    FOREIGN KEY (TIPO_EMAIL_ID) REFERENCES TIPO_EMAIL(ID),
+    FOREIGN KEY (CONTATO_ID) REFERENCES CONTATO(ID)
+);
+
+
+CREATE TABLE CONTATO_TELEFONE(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    TIPO_TELEFONE_ID INT NOT NULL,
+    CONTATO_ID INT NOT NULL,
+    TELEFONE VARCHAR(10),
+    FOREIGN KEY (TIPO_TELEFONE_ID) REFERENCES TIPO_TELEFONE(ID),
+    FOREIGN KEY (CONTATO_ID) REFERENCES CONTATO(ID)
+);
+
+
+CREATE TABLE ENDERECO(
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    EMPRESA_ID INT NOT NULL,
+    COLABORADOR_ID INT NOT NULL,
+    FORNECEDOR_ID INT NOT NULL,
+    CLIENTE_ID INT NOT NULL,
+    TIPO_ENDERECO_ID INT NOT NULL,
+    CEP_ID INT NOT NULL,
+    LOGRADOURO VARCHAR(100),
+    NUMERO INT,
+    COMPLEMENTO VARCHAR(100),
+    BAIRRO VARCHAR(50),
+    DONO CHAR(1),
+    FOREIGN KEY (CEP_ID) REFERENCES CEP(ID),
+    FOREIGN KEY (TIPO_ENDERECO_ID) REFERENCES TIPO_ENDERECO(ID),
+    FOREIGN KEY (CLIENTE_ID) REFERENCES CLIENTE(ID),
+    FOREIGN KEY (FORNECEDOR_ID) REFERENCES FORNECEDOR(ID),
+    FOREIGN KEY (COLABORADOR_ID) REFERENCES COLABORADOR(ID),
+    FOREIGN KEY (EMPRESA_ID) REFERENCES EMPRESA(ID)
+);
+
+
+------------------------
+----- INSERT
+------------------------
+
+INSERT INTO CFOP (CFOP,DESCRICAO,APLICACAO)
+VALUES (1000,'ENTRADAS OU AQUISIÇÕES DE SERVIÇOS DO ESTADO','Classificam-se, neste grupo, as operações ou prestações em que o estabelecimento remetente esteja localizado na mesma unidade da Federação do destinatário'),
+    (1100,'COMPRAS PARA INDUSTRIALIZAÇÃO, PRODUÇÃO RURAL, COMERCIALIZAÇÃO OU PRESTAÇÃO DE SERVIÇOS','(NR Ajuste SINIEF 05/2005) (DECRETO Nº 28.868, DE 31/01/2006)\r\n\r\n(Dec. 28.868/2006 – Efeitos a partir de 01/01/2006, ficando facultada ao contribuinte a sua adoção para fatos geradores ocorridos no período de 01 de novembro a 31 de dezembro de 2005)'),(1101,'Compra para industrialização ou produção rural (NR Ajuste SINIEF 05/2005) (Decreto 28.868/2006)','Compra de mercadoria a ser utilizada em processo de industrialização ou produção rural, bem como a entrada de mercadoria em estabelecimento industrial ou produtor rural de cooperativa recebida de seus cooperados ou de estabelecimento de outra cooperativa.\r\n\r\n(DECRETO Nº 28.868, DE 31/01/2006-– Efeitos a partir de 01/01/2006, ficando facultada ao contribuinte a sua adoção para fatos geradores ocorridos no período de 01 de novembro a 31 de dezembro de 2005).'),(1102,'Compra para comercialização','Classificam-se neste código as compras de mercadorias a serem comercializadas. Também serão classificadas neste código as entradas de mercadorias em estabelecimento comercial de cooperativa recebidas de seus cooperados ou de estabelecimento de outra cooperativa.');
+
+INSERT INTO OPERADORA_CARTAO (BANDEIRA,NOME) VALUES ('VISA','0VISA'),('MASTERCARD','0MASTERCARD');
+
+INSERT INTO PAIS (CODIGO,NOME,SIGLA2,SIGLA3) VALUES (1,'BRASIL','BR','BRA'),(2,'ESTADOS UNIDOS','EU','EUA'),(3,'ANGOLA','AN','ANG');
+
+INSERT INTO PAPEL (NOME,DESCRICAO) VALUES ('ADM','ADMINISTRADO'),('USER','USUARIO'),('TESTE','TESTE');
+
+INSERT INTO SITUACAO_FOR_CLI (NOME,DESCRICAO) VALUES ('NORMAL',NULL),('DEVEDOR',NULL),('OUTRO',NULL);
+
+INSERT INTO GRUPO_PRODUTO (NOME,DESCRICAO) VALUES ('GRUPO 01',NULL),('GRUPO 02',NULL),('GRUPO 03',NULL);
+
+INSERT INTO NIVEL_FORMACAO (NOME,DESCRICAO) VALUES ('MESTRADO',NULL),('ENSINO MEDIO',NULL),('ENSINO FUNDAMENTAL',NULL);
+
+INSERT INTO TIPO_RELACIONAMENTO (NOME,DESCRICAO) VALUES ('FILHO',NULL);
+
+INSERT INTO TIPO_TELEFONE (NOME,DESCRICAO) VALUES ('RESIDENCIAL',NULL);
+
+INSERT INTO UNIDADE_PRODUTO (NOME,DESCRICAO) VALUES ('UND','UNIDADE'),('KG','KILO'),('CX','CAIXA'),('TESTE UND','TESTE UND');
+
+INSERT INTO TIPO_FORNECEDOR (NOME,DESCRICAO) VALUES ('FORNECEDOR',NULL);
+
+INSERT INTO TIPO_COLABORADOR (NOME,DESCRICAO) VALUES ('EMPREGADO',NULL),('REPRESENTANTE','REPRESENTANTE DA EMPRESA');
+
+INSERT INTO TIPO_EMAIL (NOME,DESCRICAO) VALUES ('PESSOAL',NULL);
+
+INSERT INTO TIPO_ENDERECO (NOME,DESCRICAO) VALUES ('RESIDENCIAL','Endereço moradia.'),('TRABALHO','Endereço do local de trabalho');
+
+
+INSERT INTO CARGO (NOME,DESCRICAO,SALARIO)
+VALUES ('ANALISTA','ANALISTA DE SISTEMAS',8000.00),
+       ('PROGRAMADOR','AJUDA O ANALISTA',5500.00),
+       ('DBA','ADMINISTRADOR DE BANCO DE DADOS',6000.00),
+       ('TÉCNICO DE INFORMÁTICA','AJUDA O ANALISTA E O PROGRAMADOR',1900.00),
+       ('TÉCNICO','ADMINISTRATIVO',2500.00);
+
+SELECT * FROM CARGO;
+
+
+INSERT INTO EMPRESA
+    (EMPRESA_ID,RAZAO_SOCIAL,NOME_FANTASIA,CNPJ,INSCRICAO_ESTADUAL,INSCRICAO_MUNICIPAL,MATRIZ_FILIAL,DATA_CADASTRO)
+VALUES (1,'SERVICO NACIONAL DE APRENDIZAGEM INDUSTRIAL - DEPARTAMENTO REGIONAL DO DISTRITO FEDERAL','SENAI DR/DF','03806360000173',NULL,NULL,NULL,CURRENT_TIMESTAMP);
+
+INSERT INTO SETOR (EMPRESA_ID,NOME,DESCRICAO) VALUES (1,'INFORMATICA',NULL),(1,'VENDAS','SETOR DE VENDAS'),(1,'RECURSOS HUMANOS','RECURSOS HUMANOS');
+
+INSERT INTO SUB_GRUPO_PRODUTO
+    (ID_GRUPO,NOME,DESCRICAO)
+VALUES
+    (1,'SUBGRUPO 1.01',NULL),
+    (1,'SUBGRUPO 1.02',NULL),
+    (1,'SUBGRUPO 1.03',NULL),
+    (2,'SUBGRUPO 2.01',NULL),
+    (2,'SUBGRUPO 2.02',NULL),
+    (3,'SUBGRUPO 3.01',NULL);
+
+INSERT INTO ESTADO (PAIS_ID,SIGLA,NOME,CODIGO_IBGE) VALUES (1,'DF','DISTRITO FEDERAL',53),(1,'CE','CEARA',19),(1,'MA','MARANHAO',21),(2,'NY','NEW YORK',NULL);
+
+INSERT INTO
+    CONVENIO
+    (ID_EMPRESA,NOME,DESCRICAO,DESCONTO,DATA_VENCIMENTO,ENDERECO,CONTATO,TELEFONE,EXCLUIDO,DATA_CADASTRO)
+VALUES (1,'COCA COLA',NULL,20.00,NULL,NULL,NULL,NULL,NULL,CURRENT_TIMESTAMP);
+
+INSERT INTO INDICE_ECONOMICO (PAIS_ID,SIGLA,NOME,DESCRICAO) VALUES (1,'IPCA','INDICE DE PRECOS CONSUMIDOR AMPLO',NULL);
+
+INSERT INTO
+    CLIENTE
+    (SITUACAO_FOR_CLI_ID,ID_EMPRESA,NOME,CPF_CNPJ,RG,ORGAO_RG,INSCRICAO_ESTADUAL,INSCRICAO_MUNICIPAL,DESDE,TIPO_PESSOA,EXCLUIDO,DATA_CADASTRO)
+VALUES (1,1,'CLIENTE 01','61368455789','930152878','SSP-DF',NULL,'','2010-06-01','F','N',CURRENT_TIMESTAMP);
+
+INSERT INTO
+    PRODUTO
+    (ID_SUB_GRUPO,ID_UNIDADE,GTIN,NOME_PRODUTO,DESCRICAO,DESCRICAO_PDV,VALOR_COMPRA,VALOR_VENDA,QTD_ESTOQUE,ESTOQUE_MIN,ESTOQUE_MAX,EXCLUIDO,DATA_CADASTRO)
+VALUES
+    (1,1,NULL,'CANETA',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CURRENT_TIMESTAMP),
+    (1,1,NULL,'LAPIS',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CURRENT_TIMESTAMP),
+    (2,1,NULL,'CADERNO',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CURRENT_TIMESTAMP),
+    (2,1,NULL,'REGUA',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CURRENT_TIMESTAMP),
+    (4,1,NULL,'CELTA',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CURRENT_TIMESTAMP),
+    (4,1,NULL,'PALIO',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CURRENT_TIMESTAMP);
+
+INSERT INTO BANCO (CODIGO,NOME,URL) VALUES (1,'BANCO DO BRASIL','BB.COM'),(237,'BRADESCO','BRADESCO.COM'),(555,'ITAU','ITAU.COM');
+
+INSERT INTO SETOR (EMPRESA_ID,NOME,DESCRICAO) VALUES (1,'INFORMATICA',NULL),(1,'VENDAS','SETOR DE VENDAS'),(1,'RECURSOS HUMANOS','RECURSOS HUMANOS');
+
+INSERT INTO FORNECEDOR
+    (SITUACAO_FOR_CLI_ID,TIPO_FORNECEDOR_ID,ID_EMPRESA,NOME,CPF_CNPJ,RG,ORGAO_RG,INSCRICAO_ESTADUAL,INSCRICAO_MUNICIPAL,DESDE,TIPO_PESSOA,EXCLUIDO,DATA_CADASTRO)
+VALUES (1,1,1,'FORNECEDOR 01',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CURRENT_TIMESTAMP),(1,1,1,'FORNECEDOR 02',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,CURRENT_TIMESTAMP);
+
+INSERT INTO COLABORADOR
+    (NIVEL_FORMACAO_ID,TIPO_COLABORADOR_ID,CARGO_ID,ID_SETOR,NOME,CPF,RG,ORGAO_RG,DATA_NASCIMENTO,TIPO_SANGUINEO,FOTO_34,EXCLUIDO,DATA_CADASTRO)
+VALUES (1,1,1,1,'ALBERT','12345678910','123','SSP-CE','1977-04-22','A+',NULL,'N',CURRENT_TIMESTAMP);
+
+INSERT INTO CIDADE (ESTADO_ID,NOME,CODIGO_IBGE) VALUES (1,'BRASILIA',53123),(2,'FORTALEZA',19123);
+
+INSERT INTO USUARIO (PAPEL_ID,COLABORADOR_ID,LOGIN,SENHA,DATA_CADASTRO) VALUES (1,1,'ALBERT','123',NULL);
+
+INSERT INTO CONTATO (EMPRESA_ID,COLABORADOR_ID,CLIENTE_ID,FORNECEDOR_ID,NOME,DONO) VALUES (1,1,1,1,'JOAO','C');
+
+INSERT INTO CEP (CIDADE_ID,CEP,LOGRADOURO,BAIRRO) VALUES (1,'60763560','RUA 107','CENTRO'),(1,'60763561','RUA 108','CENTRO');
+
+INSERT INTO AGENCIA_BANCO
+    (CEP_ID,BANCO_ID,CODIGO,NOME,ENDERECO,TELEFONE,GERENTE,CONTATO,OBS)
+VALUES (1,1,1522,'AG AGUAS CLARAS',NULL,NULL,'NUNES',NULL,NULL),
+       (1,2,666,'666','RUA 107','666','666','666','666'),
+       (1,1,77,'77','RUA 107','77','77','77','77'),
+       (1,1,66,'66','66','66','66','66','66'),
+       (1,2,987,'987','RUA 107','987','987','987','987'),
+       (1,2,789789,'789789','RUA 107','789789','789789','789789','789789'),
+       (1,2,8787,'AGENCIA 87879','RUA 107','87878787','GERENTE 8787','CONTATO 8787','8787'),
+       (1,3,8798,'ITAU555','RUA 107','ITAU555','ITAU555','ITAU555','ITAU555'),
+       (1,2,474747,'47','RUA 107','47','47','47','47'),
+       (1,1,445566,'445566','RUA 107','445566','445566','445566','445566'),
+       (1,3,9966,'9966','RUA 107','9966','9966','9966','9966'),
+       (1,3,555888,'555888','RUA 107','555888','555888','555888','555888');
+
+INSERT INTO CONTATO_TELEFONE (TIPO_TELEFONE_ID,CONTATO_ID,TELEFONE) VALUES (1,1,'6154875487');
+
+INSERT INTO CONTATO_EMAIL (TIPO_EMAIL_ID,CONTATO_ID,EMAIL) VALUES (1,1,'adm@senai.com');
+
+INSERT INTO ENDERECO
+    (EMPRESA_ID,COLABORADOR_ID,FORNECEDOR_ID,CLIENTE_ID,TIPO_ENDERECO_ID,CEP_ID,LOGRADOURO,NUMERO,COMPLEMENTO,BAIRRO,DONO)
+VALUES (1,1,1,1,1,1,'RUA 107',281,'','CENTRO','C'),
+       (1,1,2,1,2,1,'RUA 108',291,NULL,'CENTRO','C');
+
+insert into COLABORADOR (NIVEL_FORMACAO_ID,
+  TIPO_COLABORADOR_ID, CARGO_ID, ID_SETOR,
+  NOME, CPF, RG, ORGAO_RG, DATA_NASCIMENTO,
+  TIPO_SANGUINEO, FOTO_34, EXCLUIDO,
+  DATA_CADASTRO) VALUES (2,1,3,1,'JOÃO',
+  '66546556','245435','SSP/DF','2002-10-02',
+  'O+',NULL,'1','2022-12-22'),(1,1,2,1,'MARIA',
+  '6465465','232123','SSP/DF','2008-11-09',
+  'O+',NULL,'1','2022-12-22'),(1,1,2,1,'PAULO',
+  '6576578548','2365655','SSP/SP','2000-06-23',
+  'O+',NULL,'1','2022-12-22'),(1,1,4,1,'LUIZA',
+  '767665','267432','SSP/RS','1990-04-13',
+  'O+',NULL,'1','2022-12-22');
+
+insert into endereco(EMPRESA_ID,COLABORADOR_ID,FORNECEDOR_ID,CLIENTE_ID,TIPO_ENDERECO_ID,CEP_ID,LOGRADOURO,NUMERO,COMPLEMENTO,BAIRRO,DONO)
+values (1,1,1,1,1,1,'QUADRA 104','23','SETOR COMERCIAL SUL','TAGUATINGA','C'),
+(1,2,1,1,1,1,'RUA NORTE','14','SETOR COMERCIAL NORTE','TAGUATINGA','C'),
+(1,3,1,1,1,1,'QUADRA 21','105','SETOR HOTELEIRO','ASA NORTE','C'),
+(1,4,1,1,1,1,'QUADRA 111','306','SQS','ASA SUL','C'),
+(1,6,1,1,1,1,'RUA 07','27','SETOR DE CHACARA','SAMAMBAIA','C');
+
+INSERT INTO CEP(CIDADE_ID,CEP,LOGRADOURO,BAIRRO) VALUES
+(2,'73223440','RUA 13','PELORINHO'),(2,'71424432','RUA 13','JARDINS'),
+(1,'75943743','QUADRA 115','ASA SUL'),(1,'70263721','QUADRA 202','ASA NORTE'),
+(1,'71788320','QUADRA 302','SUDOESTE');
+
+
+-- adiciona;
+insert into fornecedor(SITUACAO_FOR_CLI_ID,TIPO_FORNECEDOR_ID,ID_EMPRESA,NOME,CPF_CNPJ,RG,ORGAO_RG,INSCRICAO_ESTADUAL,INSCRICAO_MUNICIPAL,DESDE,TIPO_PESSOA,EXCLUIDO,DATA_CADASTRO)
+values(1,1,1,'JOÃO','254543543','454543234','ssp/df','54545435','4554354',null,'1','1','2022-03-01'),
+(1,1,1,'Maria','4636536','34343344','ssp/df','6345653','4555654',null,'1','1','2022-01-02');
+
+insert into CONTATO(EMPRESA_ID,COLABORADOR_ID,
+CLIENTE_ID,FORNECEDOR_ID,NOME,DONO) VALUES (1,1,1,1,'JUNDIAI',NULL);
+
+insert into fornecedor(SITUACAO_FOR_CLI_ID,TIPO_FORNECEDOR_ID,ID_EMPRESA,NOME,CPF_CNPJ,RG,ORGAO_RG,INSCRICAO_ESTADuAL,INSCRICAO_MUNICIPAL,DESDE,TIPO_PESSOA,EXCLUIDO,DATA_CADASTRO)
+values(1,1,1,'JOÃO','254543543','454543234','ssp/df','54545435','4554354',null,'1','1','2022-03-01'),
+(1,1,1,'Maria','4636536','34343344','ssp/df','6345653','4555654',null,'1','1','2022-01-02');
+
+insert into CONTATO(EMPRESA_ID,COLABORADOR_ID,
+CLIENTE_ID,FORNECEDOR_ID,NOME,DONO) VALUES (1,1,1,1,'JUNDIAI',NULL);
+
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Cadastro de Usuários', 'cad_usuario.jpg', 'adicionarUsuario');
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Consulta de Produtos', 'consulta_produto.jpg', 'consultarProdutos');
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Relatório de Vendas', 'relatorio_vendas.jpg', 'gerarRelatorioVendas');
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Configurações do Sistema', 'config_sistema.jpg', 'acessarConfiguracoes');
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Gestão de Estoque', 'gestao_estoque.jpg', 'gerenciarEstoque');
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Suporte Técnico', 'suporte_tecnico.jpg', 'acessarSuporte');
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Cadastro de Fornecedores', 'cad_fornecedor.jpg', 'adicionarFornecedor');
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Agenda de Compromissos', 'agenda_compromissos.jpg', 'gerenciarAgenda');
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Notificações do Sistema', 'notificacoes_sistema.jpg', 'verNotificacoes');
+
+INSERT INTO FUNCAO (DESCRICAO_MENU, IMAGEM_MENU, METODO) VALUES ('Gerenciamento de Permissões', 'ger_permissoes.jpg', 'editarPermissoes');
+
+
+-- Inserts para as filiais
+
+INSERT INTO EMPRESA
+    (EMPRESA_ID, RAZAO_SOCIAL, NOME_FANTASIA, CNPJ, INSCRICAO_ESTADUAL, INSCRICAO_MUNICIPAL, MATRIZ_FILIAL, DATA_CADASTRO)
+VALUES (1, 'XYZ Filial Sul', 'XYZ Sul', '23456789012345', 'IE234567', 'IM234567', 'F', '2023-01-02');
+
+INSERT INTO EMPRESA
+    (EMPRESA_ID, RAZAO_SOCIAL, NOME_FANTASIA, CNPJ, INSCRICAO_ESTADUAL, INSCRICAO_MUNICIPAL, MATRIZ_FILIAL, DATA_CADASTRO)
+VALUES (1, 'XYZ Filial Norte', 'XYZ Norte', '34567890123456', 'IE345678', 'IM345678', 'F', '2023-01-03');
+
+INSERT INTO EMPRESA
+    (EMPRESA_ID, RAZAO_SOCIAL, NOME_FANTASIA, CNPJ, INSCRICAO_ESTADUAL, INSCRICAO_MUNICIPAL, MATRIZ_FILIAL, DATA_CADASTRO)
+VALUES (1, 'XYZ Filial Leste', 'XYZ Leste', '45678901234567', 'IE456789', 'IM456789', 'F', '2023-01-04');
+
+INSERT INTO EMPRESA
+    (EMPRESA_ID, RAZAO_SOCIAL, NOME_FANTASIA, CNPJ, INSCRICAO_ESTADUAL, INSCRICAO_MUNICIPAL, MATRIZ_FILIAL, DATA_CADASTRO)
+VALUES (1, 'XYZ Filial Oeste', 'XYZ Oeste', '56789012345678', 'IE567890', 'IM567890', 'F', '2023-01-05');
+
+INSERT INTO EMPRESA
+    (EMPRESA_ID, RAZAO_SOCIAL, NOME_FANTASIA, CNPJ, INSCRICAO_ESTADUAL, INSCRICAO_MUNICIPAL, MATRIZ_FILIAL, DATA_CADASTRO)
+VALUES (1, 'XYZ Filial Nordeste', 'XYZ Nordeste', '67890123456789', 'IE678901', 'IM678901', 'F', '2023-01-06');
+
+INSERT INTO EMPRESA
+    (EMPRESA_ID, RAZAO_SOCIAL, NOME_FANTASIA, CNPJ, INSCRICAO_ESTADUAL, INSCRICAO_MUNICIPAL, MATRIZ_FILIAL, DATA_CADASTRO)
+VALUES (1, 'XYZ Filial Sudeste', 'XYZ Sudeste', '78901234567890', 'IE789012', 'IM789012', 'F', '2023-01-07');
+
+INSERT INTO EMPRESA
+    (EMPRESA_ID, RAZAO_SOCIAL, NOME_FANTASIA, CNPJ, INSCRICAO_ESTADUAL, INSCRICAO_MUNICIPAL, MATRIZ_FILIAL, DATA_CADASTRO)
+VALUES (1, 'XYZ Filial Centro-Oeste', 'XYZ Centro-Oeste', '89012345678901', 'IE890123', 'IM890123', 'F', '2023-01-08');
+
+INSERT INTO EMPRESA
+    (EMPRESA_ID, RAZAO_SOCIAL, NOME_FANTASIA, CNPJ, INSCRICAO_ESTADUAL, INSCRICAO_MUNICIPAL, MATRIZ_FILIAL, DATA_CADASTRO)
+VALUES (1, 'XYZ Filial Suldeste', 'XYZ Suldeste', '90123456789012', 'IE901234', 'IM901234', 'F', '2023-01-09');
+
+INSERT INTO
+    EMPRESA (EMPRESA_ID, RAZAO_SOCIAL, NOME_FANTASIA, CNPJ, INSCRICAO_ESTADUAL, INSCRICAO_MUNICIPAL, MATRIZ_FILIAL, DATA_CADASTRO)
+VALUES (1, 'XYZ Filial Externa', 'XYZ Externa', '01234567890123', 'IE012345', 'IM012345', 'F', '2023-01-10');
 
 
 
-
-select
- a.nome,
- a.cpf,
- a.rg,
- s.sexo,
- t.cod_turma,
- t.turno,
- t.data_inicio,
- t.data_final,
- p.nome,
- p.matricula
-from aluno a
-inner join sexo s on s.id_sexo = a.id_sexo
-inner join aluno_has_turma at on at.id_aluno = a.id_aluno
-inner join turma t on t.id_turma = at.id_turma
-inner join professor_has_turma pt on pt.id_turma = t.id_turma
-inner join professor p on p.id_professor = pt.id_professor;
