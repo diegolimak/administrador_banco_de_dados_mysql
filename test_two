@@ -683,7 +683,7 @@ VALUES (1, 'XYZ Filial Externa', 'XYZ Externa', '01234567890123', 'IE012345', 'I
 -- Filtre o resultado pelo cpf_cnpj do fornecedor
 
 
-
+-- codigo my
 SELECT
 f.nome nome_fornecedor,
 f.data_cadastro,
@@ -709,3 +709,48 @@ select * from fornecedor
 
 -- exlusão de fornecedores duplicados
 delete from fornecedor where id in (5,6);
+
+delete from contato where id in (3);
+
+
+select * from cargo;
+
+select
+    c.nome as nome_colaborador,
+    c.cpf,
+    c3.nome cargo,
+    c3.salario,
+case
+when c3.salario <= 1212 then c3.salario * 0.075
+when c3.salario > 1212 and c3.salario <= 2424.35 then c3.salario * 0.09
+when c3.salario > 2424.36 and c3.salario <= 3641.03 theN c3.salario * 0.12
+when c3.salario > 3641.04 and c3.salario <= 7087.22 theN c3.salario * 0.14
+else c3.salario * 0.14
+end as aliquota_inss,
+case
+when c3.salario <= 1903.98 then c3.salario = 0
+when c3.salario > 1903.99 and c3.salario <= 2826.65 then c3.salario * 0.075
+when c3.salario > 2826.66 and c3.salario <= 3751.05 theN c3.salario * 0.15
+when c3.salario > 3751.06 and c3.salario <= 4664.68 theN c3.salario * 0.225
+else c3.salario * 0.275
+end as aliquota_irff,
+    c3.salario - (
+    case
+        when c3.salario <= 1212 then c3.salario * 0.075
+        when c3.salario > 1212 and c3.salario <= 2424.35 then c3.salario * 0.09
+        when c3.salario > 2424.36 and c3.salario <= 3641.03 theN c3.salario * 0.12
+        when c3.salario > 3641.04 and c3.salario <= 7087.22 theN c3.salario * 0.14
+        else c3.salario * 0.14
+        end +
+    case
+        when c3.salario <= 1903.98 then c3.salario = 0
+        when c3.salario > 1903.99 and c3.salario <= 2826.65 then c3.salario * 0.075
+        when c3.salario > 2826.66 and c3.salario <= 3751.05 theN c3.salario * 0.15
+        when c3.salario > 3751.06 and c3.salario <= 4664.68 theN c3.salario * 0.225
+        else c3.salario * 0.275
+       end) as salario_liquido
+from colaborador as c
+left join CONTATO as c2 on c.id = c2.COLABORADOR_ID
+right join cargo as c3 on c.CARGO_ID = c3.id;
+
+
