@@ -1,0 +1,164 @@
+Select
+f.nome,
+f.cpf_cnpj ,
+f.INSCRICAO_ESTADUAL,
+f.DATA_CADASTRO,
+tf.NOME,
+tf.DESCRICAO,
+p.nome_produto,
+p.DESCRICAO,
+p.QTD_ESTOQUE,
+p.VALOR_VENDA,
+p.VALOR_COMPRA,
+p.VALOR_VENDA - p.VALOR_COMPRA AS valor_lucro_unitario,
+p.QTD_ESTOQUE * (p.VALOR_VENDA - p.VALOR_COMPRA) as valor_lucro_total
+from fornecedor f
+left join tipo_fornecedor tf on tf.ID = f.TIPO_FORNECEDOR_ID
+inner join fornecedor_produto fp on fp.FORNECEDOR_ID = f.Id
+inner join produto p on p.id = fp.produto_id
+;
+
+
+
+-- Altere a query para mostrar apenas os produtos com QTD_ESTOQUE maior ou igual a 50.
+
+-- Ordene os resultados pelo valor_lucro_total em ordem decrescente.
+
+-- Mostre o lucro total por fornecedor.
+
+-- Mostre o nome do grupo dos produtos (SEPARADO)
+
+-- Crie uma VIEW baseada nessas implementações.
+
+select * from produto
+where QTD_ESTOQUE >= "50";
+
+
+
+select * from produto order by valor desc;
+
+
+-- Altere a query para mostrar apenas os produtos com QTD_ESTOQUE maior ou igual a 50.
+Select
+f.nome,
+f.cpf_cnpj ,
+f.DATA_CADASTRO,
+tf.NOME,
+p.nome_produto,
+p.QTD_ESTOQUE,
+p.VALOR_VENDA,
+p.VALOR_COMPRA,
+p.VALOR_VENDA - p.VALOR_COMPRA AS valor_lucro_unitario,
+p.QTD_ESTOQUE * (p.VALOR_VENDA - p.VALOR_COMPRA) as valor_lucro_total
+from fornecedor f
+inner join tipo_fornecedor tf on tf.ID = f.TIPO_FORNECEDOR_ID
+inner join fornecedor_produto fp on fp.FORNECEDOR_ID = f.Id
+inner join produto p on p.id = fp.produto_id
+where QTD_ESTOQUE >= 50;
+
+
+-- Ordene os resultados pelo valor_lucro_total em ordem decrescente.
+Select
+f.nome,
+f.cpf_cnpj ,
+f.INSCRICAO_ESTADUAL,
+f.DATA_CADASTRO,
+tf.NOME,
+tf.DESCRICAO,
+p.nome_produto,
+p.DESCRICAO,
+p.QTD_ESTOQUE,
+p.VALOR_VENDA,
+p.VALOR_COMPRA,
+p.VALOR_VENDA - p.VALOR_COMPRA AS valor_lucro_unitario,
+p.QTD_ESTOQUE * (p.VALOR_VENDA - p.VALOR_COMPRA) as valor_lucro_total
+from fornecedor f
+inner join tipo_fornecedor tf on tf.ID = f.TIPO_FORNECEDOR_ID
+inner join fornecedor_produto fp on fp.FORNECEDOR_ID = f.Id
+inner join produto p on p.id = fp.produto_id
+order by valor_lucro_total desc;
+
+
+-- Mostre o lucro total por fornecedor.
+Select
+f.nome,
+sum((p.VALOR_VENDA - p.VALOR_COMPRA) * p.QTD_ESTOQUE) as lucro_total
+from produto p
+inner join fornecedor_produto fp on fp.produto_id = p.id
+inner join fornecedor f on f.id = fp.fornecedor_id
+group by f.nome;
+
+
+-- Mostre o nome do grupo dos produtos
+select
+f.nome nome_fornecedor,
+f.cpf_cnpj ,
+f.INSCRICAO_ESTADUAL,
+f.DATA_CADASTRO,
+tf.NOME,
+p.nome_produto,
+p.QTD_ESTOQUE,
+p.VALOR_VENDA,
+p.VALOR_COMPRA,
+p.VALOR_VENDA - p.VALOR_COMPRA AS valor_lucro_unitario,
+p.QTD_ESTOQUE * (p.VALOR_VENDA - p.VALOR_COMPRA) as lucro_total,
+gp.nome
+from fornecedor f
+inner join tipo_fornecedor tf on tf.ID = f.TIPO_FORNECEDOR_ID
+inner join fornecedor_produto fp on fp.FORNECEDOR_ID = f.Id
+inner join produto p on p.id = fp.produto_id
+inner join sub_grupo_produto sgp on p.ID_SUB_GRUPO = sgp.ID
+inner join grupo_produto gp on sgp.ID_GRUPO = gp.id
+;
+
+select * from grupo_produto;
+
+-- Crie uma VIEW baseada nessas implementações.
+create view lucro_total_por_grupo as
+SELECT
+  f.nome nome_fornecedor,
+  f.cpf_cnpj,
+  f.DATA_CADASTRO,
+  tf.NOME AS nome_tipo_fornecedor,
+  p.nome_produto,
+  p.QTD_ESTOQUE,
+  p.VALOR_VENDA,
+  p.VALOR_COMPRA,
+  gp.NOME,
+  p.VALOR_VENDA - p.VALOR_COMPRA AS valor_lucro_unitario,
+  p.QTD_ESTOQUE * (p.VALOR_VENDA - p.VALOR_COMPRA) AS lucro_total
+FROM fornecedor f
+LEFT JOIN tipo_fornecedor tf ON tf.ID = f.TIPO_FORNECEDOR_ID
+INNER JOIN fornecedor_produto fp ON fp.FORNECEDOR_ID = f.Id
+INNER JOIN produto p ON p.id = fp.produto_id
+inner join sub_grupo_produto sgp on p.ID_SUB_GRUPO = sgp.ID
+inner join grupo_produto gp on sgp.ID_GRUPO = gp.id
+WHERE p.QTD_ESTOQUE >= 50
+ORDER BY lucro_total DESC;
+
+
+SELECT
+  f.nome AS nome_fornecedor,
+  SUM(p.QTD_ESTOQUE * (p.VALOR_VENDA - p.VALOR_COMPRA)) AS lucro_total_fornecedor
+FROM fornecedor f
+LEFT JOIN tipo_fornecedor tf ON tf.ID = f.TIPO_FORNECEDOR_ID
+INNER JOIN fornecedor_produto fp ON fp.FORNECEDOR_ID = f.Id
+INNER JOIN produto p ON p.id = fp.produto_id
+WHERE p.QTD_ESTOQUE >= 50
+GROUP BY f.nome
+ORDER BY lucro_total_fornecedor DESC;
+
+
+SELECT
+  f.nome AS nome_fornecedor,
+  f.cpf_cnpj,
+  f.DATA_CADASTRO,
+  tf.NOME AS nome_tipo_fornecedor,
+  SUM(p.QTD_ESTOQUE * (p.VALOR_VENDA - p.VALOR_COMPRA)) AS lucro_total_fornecedor
+FROM fornecedor f
+LEFT JOIN tipo_fornecedor tf ON tf.ID = f.TIPO_FORNECEDOR_ID
+INNER JOIN fornecedor_produto fp ON fp.FORNECEDOR_ID = f.Id
+INNER JOIN produto p ON p.id = fp.produto_id
+WHERE p.QTD_ESTOQUE >= 50
+GROUP BY f.nome, f.cpf_cnpj, f.DATA_CADASTRO, tf.NOME
+ORDER BY lucro_total_fornecedor DESC;
