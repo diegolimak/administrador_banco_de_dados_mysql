@@ -162,3 +162,6 @@ INNER JOIN produto p ON p.id = fp.produto_id
 WHERE p.QTD_ESTOQUE >= 50
 GROUP BY f.nome, f.cpf_cnpj, f.DATA_CADASTRO, tf.NOME
 ORDER BY lucro_total_fornecedor DESC;
+
+
+insert into fornecedor_produto (FORNECEDOR_ID,PRODUTO_ID) values (2,1),(2,2),(2,3);
