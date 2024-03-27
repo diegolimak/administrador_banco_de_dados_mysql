@@ -1,0 +1,97 @@
+ crie uma função para calcular o salario médio dos cargos - aula 26/03
+
+
+select * from cargo;
+
+
+select * from colaborador;
+
+
+select * from setor;
+
+
+
+
+DELIMITER $$
+CREATE FUNCTION calcular_salario_medio
+RETURNS double(11,2)
+DETERMINISTIC
+BEGIN
+DECLARE calcular_salario_medio
+   select AVG(ca.SALARIO)
+into ca.salario
+from colaborador c
+inner join cargo ca on ca.ID = c.ID
+END$$
+DELIMITER ;
+
+
+create function enderecoCompleto(idCliente int)
+returns varchar(500)
+deterministic
+begin
+declare enderecoCompleto varchar(500);
+select
+concat(e.LOGRADOURO,' ',e.numero,' ',e.complemento,' ',e.bairro,' ',c.CEP)
+into enderecoCompleto
+from endereco e
+inner join cep c on c.ID = e.CEP_ID
+where idCliente = e.CLIENTE_ID;
+return enderecoCompleto;
+end;
+
+
+
+
+
+
+DELIMITER $$
+CREATE FUNCTION calcular_salario_medio
+RETURNS double(11,2)
+DETERMINISTIC
+BEGIN
+DECLARE calcular_salario_medio
+   select AVG(ca.SALARIO)
+into ca.salario
+from colaborador c
+inner join cargo ca on ca.ID = c.ID
+END$$
+
+
+
+
+
+
+select
+c.nome,
+ca.SALARIO
+   from colaborador c
+INNER JOIN cargo ca ON ca.ID = c.ID;
+
+
+
+
+SELECT AVG(c.SALARIO) AS media_salario
+FROM cargo c;
+
+
+
+
+
+
+
+
+CREATE FUNCTION mediaSalario()
+RETURNS double(10,2)
+   deterministic
+BEGIN
+   DECLARE salariomedio double(10,2);
+   SELECT AVG(SALARIO) INTO salariomedio
+   from cargo;
+   return salariomedio;
+END;
+
+
+
+
+
